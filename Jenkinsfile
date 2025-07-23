@@ -24,15 +24,22 @@ pipeline {
             }
         }
 
-        stage('Build & Deploy to Nexus') {
+        stage('Build') {
             steps {
-            // sh "${MAVEN_HOME}/bin/mvn clean deploy -DskipTests"
-                withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-    sh """
-        mvn clean deploy \
-        -Dusername=$NEXUS_USER \
-        -Dpassword=$NEXUS_PASS -DskipTests
-    """
+            sh "${MAVEN_HOME}/bin/mvn clean package -DskipTests"
+            }
+        }
+
+        stage('Upload to Nexus') {
+            steps {
+        withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+            sh """
+                curl -v -u $NEXUS_USER:$NEXUS_PASS \
+                --upload-file target/myapp.war \
+                http://localhost:8081/repository/maven-releases/com/example/myapp/1.0.0/myapp-1.0.0.war
+            """
+        }
+    }
 }
 
             
@@ -56,5 +63,3 @@ pipeline {
             echo '❌ Build or Deployment Failed!'
         }
     } */
-}
-}
