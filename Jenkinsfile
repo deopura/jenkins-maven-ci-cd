@@ -35,7 +35,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
             sh """
                 curl -v -u $NEXUS_USER:$NEXUS_PASS \
-                --upload-file target/myapp.war \
+                --upload-file target/myapp-1.0.0.war \
                 http://localhost:8081/repository/maven-releases/com/example/myapp/1.0.0/myapp-1.0.0.war
             """
         }
