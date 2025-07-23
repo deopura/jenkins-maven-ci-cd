@@ -37,7 +37,7 @@ pipeline {
                        war: 'target/myapp.war'
             }
         }
-    } */
+    } 
 
     post {
         success {
@@ -46,5 +46,6 @@ pipeline {
         failure {
             echo '❌ Build or Deployment Failed!'
         }
-    }
+    } */
+}
 }
