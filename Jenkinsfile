@@ -4,7 +4,7 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven3'
         SONARQUBE_SERVER = 'SonarQube'
-        //NEXUS_CREDENTIALS = credentials('nexus-creds')
+        NEXUS_CREDENTIALS = credentials('nexus-creds')
         //TOMCAT_CREDENTIALS = credentials('tomcat-creds')
         TOMCAT_URL = 'http://tomcat-host:8080/manager/text'
     }
@@ -26,7 +26,16 @@ pipeline {
 
         stage('Build & Deploy to Nexus') {
             steps {
-                sh "${MAVEN_HOME}/bin/mvn clean deploy -DskipTests"
+            // sh "${MAVEN_HOME}/bin/mvn clean deploy -DskipTests"
+                withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+    sh """
+        mvn clean deploy \
+        -Dusername=$NEXUS_USER \
+        -Dpassword=$NEXUS_PASS -DskipTests
+    """
+}
+
+            
             }
         }
 
