@@ -5,8 +5,8 @@ pipeline {
         MAVEN_HOME = tool 'Maven3'
         SONARQUBE_SERVER = 'SonarQube'
         NEXUS_CREDENTIALS = credentials('nexus-creds')
-        //TOMCAT_CREDENTIALS = credentials('tomcat-creds')
-        TOMCAT_URL = 'http://tomcat-host:8080/manager/text'
+        TOMCAT_CREDENTIALS = credentials('tomcat-creds')
+        TOMCAT_URL = 'http://localhost:9080/manager/text'
     }
 
     stages {
@@ -39,11 +39,17 @@ pipeline {
                 http://localhost:8081/repository/maven-releases/com/example/myapp/1.0.0/myapp-1.0.0.war
             """
         }
-    }
-}
-
+        }
+        }   
+        stage('Deploy to Tomcat'){
+        steps {
+                deploy adapters: [tomcat8(credentialsId: "${TOMCAT_CREDENTIALS}", path: '', url: "${TOMCAT_URL}")],
+                       contextPath: '/myapp',
+                       war: 'target/myapp-1.0.0.war'
+            } 
+        }
             
-            }
+    }
         }
 
      /*   stage('Deploy to Tomcat') {
