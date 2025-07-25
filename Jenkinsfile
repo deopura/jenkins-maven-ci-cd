@@ -7,6 +7,7 @@ pipeline {
         NEXUS_CREDENTIALS = credentials('nexus-creds')
         TOMCAT_CREDENTIALS = credentials('tomcat-creds')
         TOMCAT_URL = 'http://localhost:9080/manager/text'
+        TOMCAT_HOST = "http://localhost:9080"
         // WAR_NAME = "${APP_NAME}-${VERSION}.war"
     }
 
