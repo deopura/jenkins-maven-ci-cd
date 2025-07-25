@@ -41,12 +41,25 @@ pipeline {
         }
         }
         }   
+        
+        
+        
+        
         stage('Deploy to Tomcat'){
-        steps {
+        /* steps {
                 deploy adapters: [tomcat8(credentialsId: "${TOMCAT_CREDENTIALS}", path: '', url: "${TOMCAT_URL}")],
                        contextPath: '/myapp',
                        war: 'target/myapp-1.0.0.war'
-            } 
+            } */
+        steps {
+        withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
+        {
+          sh """
+            curl -v --upload-file ${WAR_NAME} \
+              ${TOMCAT_HOST}/manager/text/deploy?path=/${APP_NAME}&update=true \
+              --user $TOMCAT_USER:$TOMCAT_PASS
+          """
+        }     
         }
             
     }
