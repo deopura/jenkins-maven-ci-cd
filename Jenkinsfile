@@ -43,40 +43,14 @@ pipeline {
         }
         }
         }   
-        
-        
-        
-        
+
         stage('Deploy to Tomcat'){
-        /* steps {
-                deploy adapters: [tomcat8(credentialsId: "${TOMCAT_CREDENTIALS}", path: '', url: "${TOMCAT_URL}")],
-                       contextPath: '/myapp',
-                       war: 'target/myapp-1.0.0.war'
-            } */
         steps {
         withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
         {
-          sh "curl -v --upload-file target/myapp-1.0.0.war 'http://localhost:9080/manager/text/deploy?path=/myapp&update=true' --user $TOMCAT_USER:$TOMCAT_PASS"
+          sh "curl -v --upload-file target/myapp-1.0.0.war '${TOMCAT_HOST}/manager/text/deploy?path=/myapp&update=true' --user $TOMCAT_USER:$TOMCAT_PASS"
         }     
         }
          }
  }
 }
-
-     /*   stage('Deploy to Tomcat') {
-            steps {
-                deploy adapters: [tomcat8(credentialsId: "${TOMCAT_CREDENTIALS}", path: '', url: "${TOMCAT_URL}")],
-                       contextPath: '/myapp',
-                       war: 'target/myapp.war'
-            }
-        }
-    } 
-
-    post {
-        success {
-            echo '🎉 Deployment Successful!'
-        }
-        failure {
-            echo '❌ Build or Deployment Failed!'
-        }
-    } */
