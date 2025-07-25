@@ -7,6 +7,7 @@ pipeline {
         NEXUS_CREDENTIALS = credentials('nexus-creds')
         TOMCAT_CREDENTIALS = credentials('tomcat-creds')
         TOMCAT_URL = 'http://localhost:9080/manager/text'
+        // WAR_NAME = "${APP_NAME}-${VERSION}.war"
     }
 
     stages {
@@ -55,7 +56,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
         {
           sh """
-            curl -v --upload-file ${WAR_NAME} \
+            curl -v --upload-file target/myapp-1.0.0.war \
               ${TOMCAT_HOST}/manager/text/deploy?path=/${APP_NAME}&update=true \
               --user $TOMCAT_USER:$TOMCAT_PASS
           """
