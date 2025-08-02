@@ -4,8 +4,8 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'Maven3'
         SONARQUBE_SERVER = 'SonarQube'
-        NEXUS_CREDENTIALS = credentials('nexus-creds')
-        TOMCAT_CREDENTIALS = credentials('tomcat-creds')
+        NEXUS_CREDENTIALS = credentials('nexus')
+        TOMCAT_CREDENTIALS = credentials('tomcat')
         TOMCAT_URL = 'http://localhost:9080/manager/text'
         TOMCAT_HOST = "http://localhost:9080"
         // WAR_NAME = "${APP_NAME}-${VERSION}.war"
@@ -39,7 +39,7 @@ pipeline {
 
         stage('Upload to Nexus') {
             steps {
-        withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
             sh """
                 curl -v -u $NEXUS_USER:$NEXUS_PASS \
                 --upload-file target/myapp-1.0.0.war \
@@ -51,7 +51,7 @@ pipeline {
 
         stage('Deploy to Tomcat'){
         steps {
-        withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
+        withCredentials([usernamePassword(credentialsId: 'tomcat', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
         {
           sh "curl -v --upload-file target/myapp-1.0.0.war '${TOMCAT_HOST}/manager/text/deploy?path=/myapp&update=true' --user $TOMCAT_USER:$TOMCAT_PASS"
         }     
