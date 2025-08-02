@@ -8,6 +8,6 @@ public class App extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("<h1>Hello from Jenkins Maven CI/CD Pipeline!</h1>");
+        out.println("<h1>Hello this is test for new deploy from Jenkins Maven CI/CD Pipeline!</h1>");
     }
 }
