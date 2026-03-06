@@ -51,10 +51,12 @@ pipeline {
 
         stage('Deploy to Tomcat'){
         steps {
-        withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'TOMCAT_USER', passwordVariable: 'TOMCAT_PASS')]) 
-        {
-          sh "curl -v --upload-file target/myapp-1.0.0.war '${TOMCAT_HOST}/manager/text/deploy?path=/myapp&update=true' --user $TOMCAT_USER:$TOMCAT_PASS"
-        }     
+        ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl stop tomcat"
+        sh """
+        cd target
+        scp myapp-1.0.0.war ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com:/opt/tomcat/webapps/
+        """ 
+        ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl start tomcat"
         }
          }
  }
