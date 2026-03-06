@@ -57,7 +57,7 @@ pipeline {
         scp myapp-1.0.0.war ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com:/opt/tomcat/webapps/
         ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl start tomcat"
         ssh ec2-user@ec2-65-0-3-76.ap-south-1.compute.amazonaws.com "sudo systemctl stop tomcat"
-        scp myapp-1.0.0.war ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com:/opt/tomcat/webapps/
+        scp myapp-1.0.0.war ec2-user@ec2-65-0-3-76.ap-south-1.compute.amazonaws.com:/opt/tomcat/webapps/
         ssh ec2-user@ec2-65-0-3-76.ap-south-1.compute.amazonaws.com "sudo systemctl start tomcat"
         """
         }
