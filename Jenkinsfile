@@ -51,12 +51,12 @@ pipeline {
 
         stage('Deploy to Tomcat'){
         steps {
-        ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl stop tomcat"
         sh """
+        ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl stop tomcat"
         cd target
         scp myapp-1.0.0.war ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com:/opt/tomcat/webapps/
-        """ 
         ssh ec2-user@ec2-13-201-58-131.ap-south-1.compute.amazonaws.com "sudo systemctl start tomcat"
+        """
         }
          }
  }
